@@ -77,17 +77,17 @@ export function About() {
                 <span>PERSONAL OVERVIEW</span>
               </div>
 
-              <h2 className="text-left font-mono text-[clamp(1.65rem,8vw,5rem)] uppercase leading-[0.92] tracking-[-0.06em] text-white sm:text-[clamp(2rem,4.8vw,5rem)] sm:leading-[0.9] md:text-right md:tracking-[-0.08em]">
+              <h2 className="text-left font-mono text-[clamp(1.25rem,6.2vw,3.5rem)] uppercase leading-[0.96] tracking-[-0.04em] text-white sm:text-[clamp(1.6rem,4vw,4.2rem)] sm:leading-[0.92] md:text-right md:tracking-[-0.06em]">
                 JAMES IS A FIRST YEAR
-                <br />
+               
                 STUDENT AT THE
-                <br />
-                <span className="text-white/35">UNIVERSITY OF</span>
-                <br />
-                <span className="text-white/35">PANGASINAN</span>, STUDYING
-                <br className="hidden sm:block" />
-                <span className="sm:hidden"> </span>
-                INFORMATION TECHNOLOGY
+                
+                <span className="text-white/35"> UNIVERSITY OF</span>
+                
+                <span className="text-white/35"> PANGASINAN</span>, 
+               <span> STUDYING INFORMATION TECHNOLOGY</span>
+              
+                
               </h2>
 
               <div className="mt-5 flex items-center gap-3 sm:gap-4">
