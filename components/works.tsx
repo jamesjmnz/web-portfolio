@@ -91,7 +91,7 @@ export function Works() {
 
               {/* Title */}
               <motion.h3
-                className="flex-1 font-sans text-3xl font-bold tracking-tight transition-colors duration-300 group-hover:text-white/70 sm:text-4xl md:text-6xl lg:text-7xl"
+                className="flex-1 font-sans text-3xl  tracking-tight transition-colors duration-300 group-hover:text-white/70 sm:text-4xl md:text-6xl lg:text-7xl"
                 animate={{
                   x: hoveredIndex === index ? 20 : 0,
                 }}
