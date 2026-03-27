@@ -7,6 +7,7 @@ import { Footer } from "@/components/footer"
 import { CustomCursor } from "@/components/custom-cursor"
 import { SmoothScroll } from "@/components/smooth-scroll"
 import { SectionBlend } from "@/components/section-blend"
+import { FloatingChat } from "@/components/floating-chat"
 
 export default function Home() {
   return (
@@ -21,6 +22,7 @@ export default function Home() {
         <TechMarquee />
         <Footer />
       </main>
+      <FloatingChat />
     </SmoothScroll>
   )
 }
