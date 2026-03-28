@@ -1,43 +1,25 @@
 "use client"
 
+import Link from "next/link"
 import { motion } from "framer-motion"
-import {
-  SiFigma,
-  SiFramer,
-  SiGithub,
-  SiNextdotjs,
-  SiNodedotjs,
-  SiOpenai,
-  SiPostgresql,
-  SiPython,
-  SiReact,
-  SiTailwindcss,
-  SiTypescript,
-  SiVercel,
-} from "react-icons/si"
 
 import LogoLoop from "@/components/LogoLoop"
+import { marqueeTechRows } from "@/lib/tech-stack-data"
 
 const iconClassName =
   "text-[3rem] text-[#d7d7d2] transition-all duration-300 opacity-70 [filter:grayscale(1)] hover:text-[#f3f3ef] hover:opacity-100 hover:[filter:grayscale(0)] sm:text-[3.5rem] md:text-[4rem]"
 
-const topLogos = [
-  { node: <SiReact className={iconClassName} />, title: "React", href: "https://react.dev" },
-  { node: <SiNextdotjs className={iconClassName} />, title: "Next.js", href: "https://nextjs.org" },
-  { node: <SiTypescript className={iconClassName} />, title: "TypeScript", href: "https://www.typescriptlang.org" },
-  { node: <SiTailwindcss className={iconClassName} />, title: "Tailwind CSS", href: "https://tailwindcss.com" },
-  { node: <SiNodedotjs className={iconClassName} />, title: "Node.js", href: "https://nodejs.org" },
-  { node: <SiOpenai className={iconClassName} />, title: "OpenAI", href: "https://openai.com" },
-]
+const [topRow, bottomRow] = marqueeTechRows.map((row) =>
+  row.map((item) => {
+    const Icon = item.icon
 
-const bottomLogos = [
-  { node: <SiFramer className={iconClassName} />, title: "Framer", href: "https://www.framer.com/motion/" },
-  { node: <SiPython className={iconClassName} />, title: "Python", href: "https://www.python.org" },
-  { node: <SiGithub className={iconClassName} />, title: "GitHub", href: "https://github.com" },
-  { node: <SiVercel className={iconClassName} />, title: "Vercel", href: "https://vercel.com" },
-  { node: <SiFigma className={iconClassName} />, title: "Figma", href: "https://www.figma.com" },
-  { node: <SiPostgresql className={iconClassName} />, title: "PostgreSQL", href: "https://www.postgresql.org" },
-]
+    return {
+      node: <Icon className={iconClassName} />,
+      title: item.name,
+      href: item.href,
+    }
+  }),
+)
 
 export function TechMarquee() {
   return (
@@ -47,9 +29,15 @@ export function TechMarquee() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.8 }}
-        className="mx-auto mb-10 w-full max-w-[1800px]"
+        className="mx-auto mb-10 flex w-full max-w-[1800px] items-end justify-between gap-6"
       >
         <p className="mb-4 font-mono text-xs tracking-[0.3em] text-[#b7b7b1]">04 / TECHNICAL ARSENAL</p>
+        <Link
+          href="/tech-stack"
+          className="mb-4 font-mono text-[11px] uppercase tracking-[0.24em] text-white/56 transition-colors duration-300 hover:text-white"
+        >
+          See all
+        </Link>
       </motion.div>
 
       <motion.div
@@ -63,7 +51,7 @@ export function TechMarquee() {
 
         <div className="relative h-[96px] overflow-hidden sm:h-[112px]">
           <LogoLoop
-            logos={topLogos}
+            logos={topRow}
             speed={110}
             direction="left"
             logoHeight={52}
@@ -78,7 +66,7 @@ export function TechMarquee() {
 
         <div className="relative h-[96px] overflow-hidden sm:h-[112px]">
           <LogoLoop
-            logos={bottomLogos}
+            logos={bottomRow}
             speed={110}
             direction="right"
             logoHeight={52}
