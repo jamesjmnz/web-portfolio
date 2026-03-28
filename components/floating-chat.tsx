@@ -1,6 +1,6 @@
 "use client"
 
-import { FormEvent, useEffect, useState } from "react"
+import { FormEvent, useEffect, useRef, useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import { MessageCircle, Send, X } from "lucide-react"
 
@@ -26,6 +26,9 @@ const initialMessages: Message[] = [
 ]
 
 const quickReplies = ["Latest projects", "Tech stack", "Work together"]
+const SHOW_TRIGGER_SCROLL_Y = 36
+const HIDE_TRIGGER_SCROLL_Y = 6
+const HIDE_TRIGGER_DELAY_MS = 120
 
 const cannedReplies: Record<string, string> = {
   "latest projects":
@@ -36,25 +39,107 @@ const cannedReplies: Record<string, string> = {
     "If you want to collaborate, jump to the contact section or send a note through the portfolio contact links.",
 }
 
+const chatTriggerTransition = {
+  type: "spring",
+  stiffness: 260,
+  damping: 24,
+  mass: 0.9,
+}
+
+const chatTriggerVariants = {
+  hidden: {
+    opacity: 0,
+    y: 18,
+    scale: 0.92,
+    filter: "blur(10px)",
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    filter: "blur(0px)",
+    transition: chatTriggerTransition,
+  },
+  exit: {
+    opacity: 0,
+    y: 10,
+    scale: 0.96,
+    filter: "blur(6px)",
+    transition: {
+      duration: 0.22,
+      ease: [0.4, 0, 0.2, 1],
+    },
+  },
+}
+
+const chatTriggerContentVariants = {
+  hidden: {
+    opacity: 0,
+    y: 6,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.22,
+      delay: 0.06,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  },
+  exit: {
+    opacity: 0,
+    y: 4,
+    transition: {
+      duration: 0.14,
+      ease: [0.4, 0, 1, 1],
+    },
+  },
+}
+
 export function FloatingChat() {
   const [isVisible, setIsVisible] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const [input, setInput] = useState("")
   const [messages, setMessages] = useState(initialMessages)
+  const hideTimeoutRef = useRef<ReturnType<typeof window.setTimeout> | null>(null)
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrolled = window.scrollY > 24
-      setIsVisible(scrolled)
+      const scrollY = window.scrollY
+      const shouldShow = scrollY > SHOW_TRIGGER_SCROLL_Y
+      const shouldHide = scrollY <= HIDE_TRIGGER_SCROLL_Y
 
-      if (!scrolled) {
+      if (shouldShow) {
+        if (hideTimeoutRef.current) {
+          window.clearTimeout(hideTimeoutRef.current)
+          hideTimeoutRef.current = null
+        }
+
+        setIsVisible(true)
+      }
+
+      if (shouldHide) {
         setIsOpen(false)
+
+        if (!hideTimeoutRef.current) {
+          hideTimeoutRef.current = window.setTimeout(() => {
+            setIsVisible(false)
+            hideTimeoutRef.current = null
+          }, HIDE_TRIGGER_DELAY_MS)
+        }
       }
     }
 
     handleScroll()
     window.addEventListener("scroll", handleScroll, { passive: true })
-    return () => window.removeEventListener("scroll", handleScroll)
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+
+      if (hideTimeoutRef.current) {
+        window.clearTimeout(hideTimeoutRef.current)
+      }
+    }
   }, [])
 
   const submitMessage = (rawMessage: string) => {
@@ -198,23 +283,31 @@ export function FloatingChat() {
           )}
         </AnimatePresence>
 
-        <AnimatePresence>
+        <AnimatePresence mode="wait">
           {isVisible && (
             <motion.button
               type="button"
-              initial={{ opacity: 0, y: 20, scale: 0.9 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 16, scale: 0.9 }}
-              transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
+              variants={chatTriggerVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
               onClick={() => setIsOpen((current) => !current)}
-              className="group flex min-h-14 items-center gap-3 border border-white/12 bg-[#ece7df] px-5 text-black shadow-[0_16px_48px_rgba(0,0,0,0.38)] transition-transform duration-300 hover:-translate-y-1"
+              className="group flex min-h-14 origin-bottom-right items-center gap-3 border border-white/12 bg-[#ece7df] px-5 text-black shadow-[0_16px_48px_rgba(0,0,0,0.38)] will-change-transform transition-transform duration-300 hover:-translate-y-1"
               aria-expanded={isOpen}
               aria-label="Open chat"
             >
-              <span className="flex h-8 w-8 items-center justify-center rounded-full border border-black/20 bg-black/5 transition-colors duration-300 group-hover:bg-black group-hover:text-white">
+              <motion.span
+                variants={chatTriggerContentVariants}
+                className="flex h-8 w-8 items-center justify-center rounded-full border border-black/20 bg-black/5 transition-colors duration-300 group-hover:bg-black group-hover:text-white"
+              >
                 <MessageCircle className="h-4 w-4" />
-              </span>
-              <span className="font-mono text-xs uppercase tracking-[0.24em] sm:text-[0.72rem]">Open Void Chat</span>
+              </motion.span>
+              <motion.span
+                variants={chatTriggerContentVariants}
+                className="font-mono text-xs uppercase tracking-[0.24em] sm:text-[0.72rem]"
+              >
+                Open Void Chat
+              </motion.span>
             </motion.button>
           )}
         </AnimatePresence>
