@@ -1,9 +1,7 @@
 "use client"
 
-import type React from "react"
-
-import { useState, useRef } from "react"
-import { motion, useMotionValue, useSpring } from "framer-motion"
+import { useState } from "react"
+import { motion } from "framer-motion"
 import { ArrowUpRight, Github, X } from "lucide-react"
 
 import { Sheet, SheetContent, SheetDescription, SheetTitle } from "@/components/ui/sheet"
@@ -12,7 +10,7 @@ const projects = [
   {
     title: "VERIFIAI",
     tags: ["NEXTJS", "TYPESCRIPT", "TAILWIND", "PYTHON", "FASTAPI", "LANGGRAPH", "LANGCHAIN", "QDRANT", "PYTORCH", "PRISMA", "NEON", "OPENAI", "HUGGINGFACE"],
-    image: "/abstract-neural-network-visualization-dark-theme.jpg",
+    image: "/verifiai.png",
     year: "2026",
     category: "AI VERIFICATION PLATFORM",
     summary:
@@ -48,7 +46,7 @@ const projects = [
   {
     title: "REVIEWMYDORM",
     tags: ["NEXTJS", "TYPESCRIPT", "TAILWIND", "NEON", "PRISMA"],
-    image: "/abstract-memory-storage-visualization.jpg",
+    image: "/reviewmydorm-3.png",
     year: "2025",
     category: "COMMUNITY PLATFORM",
     summary:
@@ -66,7 +64,7 @@ const projects = [
   {
     title: "CAPSTONE GENERATOR",
     tags: ["REACT", "TAILWIND", "NODEJS", "EXPRESS", "OPENAI", "MONGODB"],
-    image: "/sound-wave-visualization-dark-theme.jpg",
+    image: "/capstone-2.png",
     year: "2025",
     category: "IDEATION ENGINE",
     summary:
@@ -84,26 +82,10 @@ const projects = [
 ]
 
 export function Works() {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
   const [selectedProject, setSelectedProject] = useState<(typeof projects)[number] | null>(null)
-  const containerRef = useRef<HTMLDivElement>(null)
-
-  const mouseX = useMotionValue(0)
-  const mouseY = useMotionValue(0)
-
-  const springX = useSpring(mouseX, { stiffness: 150, damping: 20 })
-  const springY = useSpring(mouseY, { stiffness: 150, damping: 20 })
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (containerRef.current) {
-      const rect = containerRef.current.getBoundingClientRect()
-      mouseX.set(e.clientX - rect.left)
-      mouseY.set(e.clientY - rect.top)
-    }
-  }
 
   return (
-    <section id="works" className="relative px-4 py-16 sm:px-6 sm:py-20 md:px-12 md:py-24">
+    <section id="works" className="relative bg-black px-4 py-16 text-white sm:px-6 sm:py-20 md:px-12 md:py-24">
       {/* Section Header */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -119,7 +101,7 @@ export function Works() {
       </motion.div>
 
       {/* Projects List */}
-      <div ref={containerRef} onMouseMove={handleMouseMove} className="relative">
+      <div className="relative border-y border-white/10 bg-black">
         {projects.map((project, index) => (
           <motion.div
             key={project.title}
@@ -127,82 +109,80 @@ export function Works() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: index * 0.1 }}
-            className="relative border-t border-white/10 py-6 sm:py-8 md:py-12"
-            onMouseEnter={() => setHoveredIndex(index)}
-            onMouseLeave={() => setHoveredIndex(null)}
+            className="relative border-b border-white/10"
           >
             <button
               type="button"
               data-cursor-hover
-              className="group flex w-full flex-col justify-between gap-4 text-left md:flex-row md:items-center"
+              className={`group flex min-h-[90vh] w-full items-center py-10 text-left ${
+                index % 2 === 0 ? "justify-start" : "justify-end"
+              }`}
               onClick={() => setSelectedProject(project)}
             >
-              {/* Year */}
-              <span className="order-1 font-mono text-[10px] tracking-[0.24em] text-muted-foreground sm:text-xs sm:tracking-widest md:order-none">
-                {project.year}
-              </span>
-
-              {/* Title */}
-              <motion.h3
-                className="flex-1 font-sans text-3xl  tracking-tight transition-colors duration-300 group-hover:text-white/70 sm:text-4xl md:text-6xl lg:text-7xl"
-                animate={{
-                  x: hoveredIndex === index ? 20 : 0,
-                }}
-                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              <div
+                className={`grid w-full max-w-6xl gap-8 ${
+                  index % 2 === 0 ? "md:grid-cols-[1.15fr_0.85fr]" : "md:grid-cols-[0.85fr_1.15fr]"
+                }`}
               >
-                {project.title}
-              </motion.h3>
+                <div className={`${index % 2 === 0 ? "md:order-1" : "md:order-2"} flex items-center`}>
+                  <div className="relative w-full overflow-hidden border border-white/15 bg-black">
+                    <div className="absolute left-3 top-3 z-10 border border-white/15 bg-black px-2 py-1 font-mono text-[9px] tracking-[0.26em] text-white/60 sm:left-4 sm:top-4">
+                      ARCHIVE FRAME
+                    </div>
+                    <img
+                      src={project.image}
+                      alt={project.title}
+                      className="h-[42vh] w-full object-cover transition duration-500 group-hover:scale-[1.03] sm:h-[50vh] md:h-[62vh]"
+                      style={{ filter: "contrast(1.04) brightness(0.82)" }}
+                    />
+                    <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.04),rgba(0,0,0,0.52))]" />
+                    <div className="pointer-events-none absolute inset-0 bg-[repeating-linear-gradient(180deg,rgba(255,255,255,0.05)_0px,rgba(255,255,255,0.05)_1px,transparent_1px,transparent_9px)] opacity-20" />
+                  </div>
+                </div>
 
-              {/* Tags */}
-              <div className="order-2 flex flex-wrap gap-2 md:order-none md:max-w-[320px] md:justify-end lg:max-w-[420px]">
-                {project.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="rounded-full border border-white/20 px-2.5 py-1 font-mono text-[9px] tracking-[0.18em] text-muted-foreground sm:px-3 sm:text-[10px] sm:tracking-wider"
-                  >
-                    {tag}
-                  </span>
-                ))}
+                <div
+                  className={`${index % 2 === 0 ? "md:order-2" : "md:order-1"} flex items-center ${
+                    index % 2 === 0 ? "md:justify-end" : "md:justify-start"
+                  }`}
+                >
+                  <div className="w-full max-w-xl">
+                    <div className="mb-5 flex items-center justify-between gap-4 font-mono text-[10px] tracking-[0.26em] text-muted-foreground sm:text-xs">
+                      <span>{project.year}</span>
+                      <span>{project.category}</span>
+                    </div>
+
+                    <motion.h3
+                      className="max-w-[12ch] font-sans text-4xl tracking-tight transition-colors duration-300 group-hover:text-white/72 sm:text-5xl md:text-6xl lg:text-7xl"
+                      whileHover={{ x: index % 2 === 0 ? 12 : -12 }}
+                      transition={{ type: "spring", stiffness: 260, damping: 24 }}
+                    >
+                      {project.title}
+                    </motion.h3>
+
+                    <p className="mt-6 max-w-lg text-sm leading-7 text-white/72 sm:text-[15px]">{project.summary}</p>
+
+                    <div className="mt-6 flex flex-wrap gap-2">
+                      {project.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="border border-white/20 bg-black px-2.5 py-1 font-mono text-[9px] tracking-[0.18em] text-white/72 sm:px-3 sm:text-[10px] sm:tracking-wider"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+
+                    <div className="mt-8 flex items-center gap-3 font-mono text-[10px] tracking-[0.24em] text-white/78">
+                      <span className="border border-white/15 px-3 py-2">OPEN DOSSIER</span>
+                      <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
+                    </div>
+                  </div>
+                </div>
               </div>
             </button>
           </motion.div>
         ))}
-
-        {/* Floating Image */}
-        <motion.div
-          className="pointer-events-none absolute z-50 hidden h-40 w-64 overflow-hidden rounded-lg md:block md:h-48 md:w-80"
-          style={{
-            x: springX,
-            y: springY,
-            translateX: "-50%",
-            translateY: "-320%",
-          }}
-          animate={{
-            opacity: hoveredIndex !== null ? 1 : 0,
-            scale: hoveredIndex !== null ? 1 : 0.8,
-          }}
-          transition={{ duration: 0.2 }}
-        >
-          {hoveredIndex !== null && (
-            <motion.img
-              src={projects[hoveredIndex].image}
-              alt={projects[hoveredIndex].title}
-              className="w-full h-full object-cover"
-              initial={{ scale: 1.2 }}
-              animate={{ scale: 1 }}
-              transition={{ duration: 0.4 }}
-              style={{
-                filter: "grayscale(50%) contrast(1.1)",
-              }}
-            />
-          )}
-          {/* Glitch overlay */}
-          <div className="absolute inset-0 bg-[#d6d6d1]/20 mix-blend-overlay" />
-        </motion.div>
       </div>
-
-      {/* Bottom Border */}
-      <div className="border-t border-white/10" />
 
       <Sheet open={selectedProject !== null} onOpenChange={(open) => !open && setSelectedProject(null)}>
         <SheetContent
