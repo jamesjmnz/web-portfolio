@@ -27,9 +27,9 @@ export const metadata: Metadata = {
     siteName: "James Jimenez Portfolio",
     images: [
       {
-        url: "/thumbnail.png",
-        width: 3338,
-        height: 1794,
+        url: "/social-thumbnail.jpg",
+        width: 1200,
+        height: 645,
         alt: "James Jimenez portfolio thumbnail",
       },
     ],
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "James Jimenez | Full-Stack AI/ML Engineer",
     description: "System Architect & Interface Designer crafting intelligent digital experiences",
-    images: ["/thumbnail.png"],
+    images: ["/social-thumbnail.jpg"],
   },
 }
 
