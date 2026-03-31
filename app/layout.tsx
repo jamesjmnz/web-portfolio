@@ -27,7 +27,7 @@ export const metadata: Metadata = {
       siteName: "James Jimenez Portfolio",
       images: [
         {
-          url: "https://jamesjimenez.vercel.app/og-image.png", // IMPORTANT
+          url: "https://jamesjimenez.vercel.app/thumbnail.png", // IMPORTANT
           width: 1200,
           height: 630,
         },
